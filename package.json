@@ -15,10 +15,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@excaliburjs/plugin-pathfinding": "^0.29.1",
     "@peasy-lib/peasy-assets": "^0.2.6",
     "@peasy-lib/peasy-input": "^0.2.0",
     "@peasy-lib/peasy-ui": "^0.9.58",
-    "excalibur": "^0.29.3"
+    "excalibur": "^0.29.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.3.0",
