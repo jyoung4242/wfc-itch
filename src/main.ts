@@ -123,38 +123,11 @@ if (roadStart.x == -1 && roadStart.y == -1 && roadEnd.x == -1 && roadEnd.y == -1
 game.currentScene.camera.pos = new Vector(halfwidth, halfheight);
 
 game.currentScene.input.keyboard.on("press", async e => {
-  if (e.key == "Space") {
-    console.clear();
-    mapgen.reset();
-    house1.reset();
-    house2.reset();
-    let startX = Math.floor(Math.random() * (tilemap.columns - house1.getDims().width)) + 1;
-    let startY = Math.floor(Math.random() * (tilemap.rows - house1.getDims().height));
-    house1.setStartingPosition({ x: startX, y: startY });
-    let startX2 = Math.floor(Math.random() * (tilemap.columns - house2.getDims().width)) + 1;
-    let startY2 = Math.floor(Math.random() * (tilemap.rows - house2.getDims().height));
-    house2.setStartingPosition({ x: startX2, y: startY2 });
-    while (isHousesColliding(house1, house2)) {
-      startX2 = Math.floor(Math.random() * (tilemap.columns - house2.getDims().width)) + 1;
-      startY2 = Math.floor(Math.random() * (tilemap.rows - house2.getDims().height));
-      house2.setStartingPosition({ x: startX2, y: startY2 });
-    }
-    await mapgen.generate();
-    await house1.generate();
-    await house2.generate();
-    game.remove(game.currentScene.tileMaps[0]);
-    mapgen.draw(game, tilemap, ffSpriteSheet);
-    house1.draw(game, tilemap, ffSpriteSheet);
-    house2.draw(game, tilemap, ffSpriteSheet);
-    let { roadStart, roadEnd } = findRoadCoordinates();
-    if (roadStart.x == -1 && roadStart.y == -1 && roadEnd.x == -1 && roadEnd.y == -1) {
-      game.add(tilemap);
-      return;
-    }
-    let road = new Road(tilemap, roadStart, roadEnd);
-    road.draw(game, tilemap, ffSpriteSheet);
-    game.add(tilemap);
-  }
+  if (e.key == "Space") regenerate();
+});
+
+game.currentScene.input.pointers.on("down", async e => {
+  regenerate();
 });
 
 function isHousesColliding(house1: House, house2: House) {
@@ -214,4 +187,37 @@ function findRoadCoordinates() {
   }
 
   return { roadStart, roadEnd };
+}
+
+async function regenerate() {
+  console.clear();
+  mapgen.reset();
+  house1.reset();
+  house2.reset();
+  let startX = Math.floor(Math.random() * (tilemap.columns - house1.getDims().width)) + 1;
+  let startY = Math.floor(Math.random() * (tilemap.rows - house1.getDims().height));
+  house1.setStartingPosition({ x: startX, y: startY });
+  let startX2 = Math.floor(Math.random() * (tilemap.columns - house2.getDims().width)) + 1;
+  let startY2 = Math.floor(Math.random() * (tilemap.rows - house2.getDims().height));
+  house2.setStartingPosition({ x: startX2, y: startY2 });
+  while (isHousesColliding(house1, house2)) {
+    startX2 = Math.floor(Math.random() * (tilemap.columns - house2.getDims().width)) + 1;
+    startY2 = Math.floor(Math.random() * (tilemap.rows - house2.getDims().height));
+    house2.setStartingPosition({ x: startX2, y: startY2 });
+  }
+  await mapgen.generate();
+  await house1.generate();
+  await house2.generate();
+  game.remove(game.currentScene.tileMaps[0]);
+  mapgen.draw(game, tilemap, ffSpriteSheet);
+  house1.draw(game, tilemap, ffSpriteSheet);
+  house2.draw(game, tilemap, ffSpriteSheet);
+  let { roadStart, roadEnd } = findRoadCoordinates();
+  if (roadStart.x == -1 && roadStart.y == -1 && roadEnd.x == -1 && roadEnd.y == -1) {
+    game.add(tilemap);
+    return;
+  }
+  let road = new Road(tilemap, roadStart, roadEnd);
+  road.draw(game, tilemap, ffSpriteSheet);
+  game.add(tilemap);
 }
