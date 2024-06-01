@@ -16,7 +16,7 @@ jobs:
     uses: ./.github/workflows/vittest.yml
 
   deploy:
-    needs: [lint, test]
+    needs: [test]
     name: Upload to Itch
     runs-on: ubuntu-latest
     steps:
