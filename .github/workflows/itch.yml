@@ -10,8 +10,6 @@ env:
   ITCH_USERNAME: Mookie4242
   ITCH_GAME_ID: wave-function-collapse-simulation
 jobs:
-  lint:
-    uses: ./.github/workflows/lint.yml
   test:
     uses: ./.github/workflows/vittest.yml
 
